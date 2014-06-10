@@ -507,6 +507,7 @@
        (compile-entry)))))
 
 (define (compile-bytecode exp env opts)
+  (define to-file? (kw-arg-ref opts #:to-file? #f))
   ;; See comment in `optimize' about the use of set!.
   (set! exp (fix-arities exp))
   (set! exp (optimize exp opts))
@@ -519,6 +520,6 @@
       (($ $program funs)
        (for-each (lambda (fun) (compile-fun fun asm))
                  funs)))
-    (values (link-assembly asm #:page-aligned? (kw-arg-ref opts #:to-file? #f))
+    (values (link-assembly asm #:page-aligned? to-file?)
             env
             env)))
